@@ -19,7 +19,7 @@ const SideBarItem: React.FC<ISideBarItem> = ({ icon: Icon, label, href }) => {
     pathname?.startsWith(`${href}`);
 
   const handleClick = () => {
-    // router.push(href);
+    router.push(href);
   };
 
   return (
