@@ -32,7 +32,6 @@ const NavBarRoutes = () => {
         </Link>
       )}
       <UserButton />
-      <div>123</div>
     </div>
   );
 };
