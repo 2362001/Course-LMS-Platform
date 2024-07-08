@@ -1,48 +1,39 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongodb"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Category {
-  id     String   @id @default(uuid())
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
   name   String   @unique
   Course Course[]
 }
 
 model Course {
-  id          String    @id @default(uuid())
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   userId      String
-  title       String    @db.Text
-  description String?   @db.Text
-  imageUrl    String?   @db.Text
+  title       String    @db.String
+  description String?   @db.String
+  imageUrl    String?   @db.String
   price       Float?
   isPublished Boolean   @default(false)
   category    Category? @relation(fields: [categoryId], references: [id])
-  categoryId  String?
+  categoryId  String?   @db.ObjectId
   attachments Att[]
   createAt    DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-
-  @@index([categoryId])
 }
 
 model Att {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   Course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId  String?
+  courseId  String?  @db.ObjectId
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([courseId])
 }
