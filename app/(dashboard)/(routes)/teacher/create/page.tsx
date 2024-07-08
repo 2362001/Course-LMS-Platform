@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import axios from "axios"
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast"
 
 const CreatePage = () => {
   const formSchema = z.object({
@@ -29,10 +32,19 @@ const CreatePage = () => {
     },
   });
 
+  const router = useRouter()
+
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await axios.post("/api/course", values)
+      if(response) {
+        router.push(`teacher/courses/${response.data.id}`)
+      }
+    } catch {
+      toast.error("Something went wrong !!!")
+    }
   };
 
   return (
